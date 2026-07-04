@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:homecheck_app/app/routes/app_routes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:homecheck_app/core/theme/app_colors.dart';
+import 'package:homecheck_app/features/authentication/presentation/controllers/auth_controller.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(authControllerProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -22,12 +24,7 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  context.go(AppRoutes.login);
-                },
-                child: const Text('Go to Login'),
-              ),
+              const CircularProgressIndicator(),
             ],
           ),
         ),

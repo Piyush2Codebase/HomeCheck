@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:homecheck_app/app/routes/app_routes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:homecheck_app/features/authentication/presentation/controllers/auth_controller.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authControllerProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              context.go(AppRoutes.home);
-            },
-            child: const Text('Continue to Home'),
-          ),
+          child: authState.isLoading
+              ? const CircularProgressIndicator()
+              : ElevatedButton(
+                  onPressed: () {
+                    ref.read(authControllerProvider.notifier).signIn();
+                  },
+                  child: const Text('Sign In'),
+                ),
         ),
       ),
     );
