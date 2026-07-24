@@ -6,6 +6,7 @@ import 'package:homecheck_app/features/authentication/presentation/controllers/a
 import 'package:homecheck_app/features/authentication/presentation/screens/login_screen.dart';
 import 'package:homecheck_app/features/home/presentation/home_screen.dart';
 import 'package:homecheck_app/features/splash/presentation/splash_screen.dart';
+import 'package:homecheck_app/features/trusted_contacts/presentation/screens/trusted_contacts_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authControllerProvider);
@@ -25,9 +26,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.home,
         builder: (context, state) => const HomeScreen(),
       ),
+      GoRoute(
+        path: AppRoutes.trustedContacts,
+        builder: (context, state) => const TrustedContactsScreen(),
+      ),
     ],
     redirect: (context, state) {
       final currentLocation = state.matchedLocation;
+      final isAuthOnlyRoute =
+          currentLocation == AppRoutes.splash || currentLocation == AppRoutes.login;
 
       switch (authState.status) {
         case AuthStatus.initial:
@@ -37,7 +44,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return currentLocation == AppRoutes.login ? null : AppRoutes.login;
 
         case AuthStatus.authenticated:
-          return currentLocation == AppRoutes.home ? null : AppRoutes.home;
+          return isAuthOnlyRoute ? AppRoutes.home : null;
       }
     },
   );
