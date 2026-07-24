@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:homecheck_app/app/app.dart';
+import 'package:homecheck_app/core/services/notification_service.dart';
 
-void main() {
-  runApp(const ProviderScope(child: HomeCheckApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final notificationService = NotificationService();
+  await notificationService.initialize();
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        notificationServiceProvider.overrideWithValue(notificationService),
+      ],
+      child: const HomeCheckApp(),
+    ),
+  );
 }
